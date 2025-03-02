@@ -96,7 +96,11 @@ public class Web3WebSocketProvider: Web3Provider, Web3BidirectionalProvider {
 
     deinit {
         closed = true
-        _ = webSocket.close(code: .goingAway)
+
+        // Close connection if already initialized
+        if let webSocket {
+          _ = webSocket.close(code: .goingAway)
+        }
 
         // As described in https://github.com/apple/swift-nio/issues/2371
         try? wsEventLoopGroup.syncShutdownGracefully()
